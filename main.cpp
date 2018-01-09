@@ -1,239 +1,38 @@
-// ƒEƒBƒ“ƒhƒEŠÖ˜A‚Ìˆ—
-#include "Window.h"
+ï»¿//
+// ãƒ¡ã‚¤ãƒ³ãƒ—ãƒ­ã‚°ãƒ©ãƒ 
+//
 
-// •W€ƒ‰ƒCƒuƒ‰ƒŠ
-#include <vector>
+// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹ã®è¡¨ç¤ºã®æº–å‚™
+#if defined(_WIN32)
+#  include <Windows.h>
+#  include <atlstr.h>  
+#endif
+
+// ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æœ¬ä½“
+#include "GgApplication.h"
 
 //
-// ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg‚ÌƒRƒ“ƒpƒCƒ‹Œ‹‰Ê‚ğ•\¦‚·‚é
+// ãƒ¡ã‚¤ãƒ³ãƒ—ãƒ­ã‚°ãƒ©ãƒ 
 //
-//   shader: ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg–¼
-//   str: ƒRƒ“ƒpƒCƒ‹ƒGƒ‰[‚ª”­¶‚µ‚½êŠ‚ğ¦‚·•¶š—ñ
-//   –ß‚è’l: ƒRƒ“ƒpƒCƒ‹‚É¬Œ÷‚µ‚Ä‚¢‚½‚ç GL_TRUE
-//
-static GLboolean printShaderInfoLog(GLuint shader, const char *str)
+int main() try
 {
-  // ƒRƒ“ƒpƒCƒ‹Œ‹‰Ê‚ğæ“¾‚·‚é
-  GLint status;
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-  if (status == GL_FALSE) std::cerr << "Compile Error in " << str << std::endl;
+  // ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æœ¬ä½“
+  GgApplication app;
 
-  // ƒVƒF[ƒ_‚ÌƒRƒ“ƒpƒCƒ‹‚ÌƒƒO‚Ì’·‚³‚ğæ“¾‚·‚é
-  GLsizei bufSize;
-  glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &bufSize);
-
-  if (bufSize > 1)
-  {
-    // ƒVƒF[ƒ_‚ÌƒRƒ“ƒpƒCƒ‹‚ÌƒƒO‚Ì“à—e‚ğæ“¾‚·‚é
-    std::vector<GLchar> infoLog(bufSize);
-    GLsizei length;
-    glGetShaderInfoLog(shader, bufSize, &length, &infoLog[0]);
-    std::cerr << &infoLog[0] << std::endl;
-  }
-
-  return static_cast<GLboolean>(status);
+  // ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹
+  app.run();
 }
-
-//
-// ƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg‚ÌƒŠƒ“ƒNŒ‹‰Ê‚ğ•\¦‚·‚é
-//
-//   program: ƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg–¼
-//   –ß‚è’l: ƒŠƒ“ƒN‚É¬Œ÷‚µ‚Ä‚¢‚½‚ç GL_TRUE
-//
-static GLboolean printProgramInfoLog(GLuint program)
+catch (const std::exception &e)
 {
-  // ƒŠƒ“ƒNŒ‹‰Ê‚ğæ“¾‚·‚é
-  GLint status;
-  glGetProgramiv(program, GL_LINK_STATUS, &status);
-  if (status == GL_FALSE) std::cerr << "Link Error." << std::endl;
+  // ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã™ã‚‹
+#if defined(_WIN32)
+  const CStringW message(e.what());
+  MessageBox(NULL, LPCWSTR(message), TEXT("ã‚²ãƒ¼ãƒ ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ç‰¹è«–"), MB_OK | MB_ICONERROR);
+#else
+  std::cerr << e.what() << "\n\n[Type enter key] ";
+  std::cin.get();
+#endif
 
-  // ƒVƒF[ƒ_‚ÌƒŠƒ“ƒN‚ÌƒƒO‚Ì’·‚³‚ğæ“¾‚·‚é
-  GLsizei bufSize;
-  glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufSize);
-
-  if (bufSize > 1)
-  {
-    // ƒVƒF[ƒ_‚ÌƒŠƒ“ƒN‚ÌƒƒO‚Ì“à—e‚ğæ“¾‚·‚é
-    std::vector<GLchar> infoLog(bufSize);
-    GLsizei length;
-    glGetProgramInfoLog(program, bufSize, &length, &infoLog[0]);
-    std::cerr << &infoLog[0] << std::endl;
-  }
-
-  return static_cast<GLboolean>(status);
-}
-
-//
-// ƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
-//
-//   vsrc: ƒo[ƒeƒbƒNƒXƒVƒF[ƒ_‚Ìƒ\[ƒXƒvƒƒOƒ‰ƒ€‚Ì•¶š—ñ
-//   pv: ƒo[ƒeƒbƒNƒXƒVƒF[ƒ_‚Ìƒ\[ƒXƒvƒƒOƒ‰ƒ€’†‚Ì in •Ï”–¼‚Ì•¶š—ñ
-//   fsrc: ƒtƒ‰ƒOƒƒ“ƒgƒVƒF[ƒ_‚Ìƒ\[ƒXƒvƒƒOƒ‰ƒ€‚Ì•¶š—ñ
-//   fc: ƒtƒ‰ƒOƒƒ“ƒgƒVƒF[ƒ_‚Ìƒ\[ƒXƒvƒƒOƒ‰ƒ€’†‚Ì out •Ï”–¼‚Ì•¶š—ñ
-//   vert: ƒo[ƒeƒbƒNƒXƒVƒF[ƒ_‚ÌƒRƒ“ƒpƒCƒ‹‚ÌƒƒbƒZ[ƒW‚É’Ç‰Á‚·‚é•¶š—ñ
-//   frag: ƒtƒ‰ƒOƒƒ“ƒgƒVƒF[ƒ_‚ÌƒRƒ“ƒpƒCƒ‹‚ÌƒƒbƒZ[ƒW‚É’Ç‰Á‚·‚é•¶š—ñ
-//   –ß‚è’l: ƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg–¼
-//
-static GLuint createProgram(const char *vsrc, const char *pv, const char *fsrc, const char *fc,
-  const char *vert = "vertex shader", const char *frag = "fragment shader")
-{
-  // ‹ó‚ÌƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
-  const GLuint program(glCreateProgram());
-
-  if (vsrc != NULL)
-  {
-    // ƒo[ƒeƒbƒNƒXƒVƒF[ƒ_‚ÌƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
-    const GLuint vobj(glCreateShader(GL_VERTEX_SHADER));
-    glShaderSource(vobj, 1, &vsrc, NULL);
-    glCompileShader(vobj);
-
-    // ƒo[ƒeƒbƒNƒXƒVƒF[ƒ_‚ÌƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg‚ğƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg‚É‘g‚İ‚Ş
-    if (printShaderInfoLog(vobj, vert))
-      glAttachShader(program, vobj);
-    glDeleteShader(vobj);
-  }
-
-  if (fsrc != NULL)
-  {
-    // ƒtƒ‰ƒOƒƒ“ƒgƒVƒF[ƒ_‚ÌƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
-    const GLuint fobj(glCreateShader(GL_FRAGMENT_SHADER));
-    glShaderSource(fobj, 1, &fsrc, NULL);
-    glCompileShader(fobj);
-
-    // ƒtƒ‰ƒOƒƒ“ƒgƒVƒF[ƒ_‚ÌƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg‚ğƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg‚É‘g‚İ‚Ş
-    if (printShaderInfoLog(fobj, vert))
-      glAttachShader(program, fobj);
-    glDeleteShader(fobj);
-  }
-
-  // ƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg‚ğƒŠƒ“ƒN‚·‚é
-  glBindAttribLocation(program, 0, pv);
-  glBindFragDataLocation(program, 0, fc);
-  glLinkProgram(program);
-
-  // ì¬‚µ‚½ƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
-  if (printProgramInfoLog(program))
-    return program;
-
-  // ƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg‚ªì¬‚Å‚«‚È‚¯‚ê‚Î 0 ‚ğ•Ô‚·
-  glDeleteProgram(program);
-  return 0;
-}
-
-//
-// ’¸“_”z—ñƒIƒuƒWƒFƒNƒg‚Ìì¬
-//
-//   vertices: ’¸“_”
-//   position: ’¸“_‚Ì“ñŸŒ³ˆÊ’u (GLfloat[2] ‚Ì”z—ñ)
-//   lines: ü•ª”
-//   index: ü•ª‚Ì’¸“_ƒCƒ“ƒfƒbƒNƒX
-//   –ß‚è’l: ì¬‚³‚ê‚½’¸“_”z—ñƒIƒuƒWƒFƒNƒg–¼
-//
-static GLuint createObject(GLuint vertices, const GLfloat (*position)[2], GLuint lines, const GLuint *index)
-{
-  // ’¸“_”z—ñƒIƒuƒWƒFƒNƒg
-  GLuint vao;
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-
-  // ’¸“_ƒoƒbƒtƒ@ƒIƒuƒWƒFƒNƒg
-  GLuint vbo;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof (GLfloat[2]) * vertices, position, GL_STATIC_DRAW);
-
-  // ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@ƒIƒuƒWƒFƒNƒg
-  GLuint ibo;
-  glGenBuffers(1, &ibo);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof (GLuint) * lines, index, GL_STATIC_DRAW);
-
-  // Œ‹‡‚³‚ê‚Ä‚¢‚é’¸“_ƒoƒbƒtƒ@ƒIƒuƒWƒFƒNƒg‚ğ in •Ï”‚©‚çQÆ‚Å‚«‚é‚æ‚¤‚É‚·‚é
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-  glEnableVertexAttribArray(0);
-
-  // ’¸“_”z—ñƒIƒuƒWƒFƒNƒg‚ÌŒ‹‡‚ğ‰ğœ‚µ‚½Œã‚É’¸“_ƒoƒbƒtƒ@ƒIƒuƒWƒFƒNƒg‚ÆƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@ƒIƒuƒWƒFƒNƒg‚ÌŒ‹‡‚ğ‰ğœ‚·‚é
-  glBindVertexArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-  return vao;
-}
-
-//
-// ƒƒCƒ“ƒvƒƒOƒ‰ƒ€
-//
-int main()
-{
-  // ƒEƒBƒ“ƒhƒE‚ğì¬‚·‚é
-  Window window("ggsample02");
-
-  // ”wŒiF‚ğw’è‚·‚é
-  glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-
-  // ƒo[ƒeƒbƒNƒXƒVƒF[ƒ_‚Ìƒ\[ƒXƒvƒƒOƒ‰ƒ€
-  static const GLchar vsrc[] =
-    "#version 150 core\n"
-    "in vec4 pv;\n"
-    "void main(void)\n"
-    "{\n"
-    "  gl_Position = pv;\n"
-    "}\n";
-
-  // ƒtƒ‰ƒOƒƒ“ƒgƒVƒF[ƒ_‚Ìƒ\[ƒXƒvƒƒOƒ‰ƒ€
-  static const GLchar fsrc[] =
-    "#version 150 core\n"
-    "out vec4 fc;\n"
-    "void main(void)\n"
-    "{\n"
-    "  fc = vec4(1.0, 0.0, 0.0, 1.0);\n"
-    "}\n";
-
-  // ƒvƒƒOƒ‰ƒ€ƒIƒuƒWƒFƒNƒg‚Ìì¬
-  const GLuint program(createProgram(vsrc, "pv", fsrc, "fc"));
-
-  // ’¸“_‘®«
-  static const GLfloat position[][2] =
-  {
-    { -0.5f, -0.5f },
-    {  0.5f, -0.5f },
-    {  0.5f,  0.5f },
-    { -0.5f,  0.5f }
-  };
-  static const int vertices(sizeof position / sizeof position[0]);
-
-  // ’¸“_ƒCƒ“ƒfƒbƒNƒX
-  static const GLuint index[] =
-  {
-    0, 2, 1, 3
-  };
-  static const GLuint lines(sizeof index / sizeof index[0]);
-
-  // ’¸“_”z—ñƒIƒuƒWƒFƒNƒg‚Ìì¬
-  const GLuint vao(createObject(vertices, position, lines, index));
-
-  // ƒEƒBƒ“ƒhƒE‚ªŠJ‚¢‚Ä‚¢‚éŠÔŒJ‚è•Ô‚·
-  while (window.shouldClose() == GL_FALSE)
-  {
-    // ƒEƒBƒ“ƒhƒE‚ğÁ‹‚·‚é
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // ƒVƒF[ƒ_ƒvƒƒOƒ‰ƒ€‚Ìg—pŠJn
-    glUseProgram(program);
-
-    // •`‰æ‚Ég‚¤’¸“_”z—ñƒIƒuƒWƒFƒNƒg‚Ìw’è
-    glBindVertexArray(vao);
-
-    // }Œ`‚Ì•`‰æ
-    glDrawElements(GL_LINE_LOOP, lines, GL_UNSIGNED_INT, 0);
-
-    // ’¸“_”z—ñƒIƒuƒWƒFƒNƒg‚Ìw’è‰ğœ
-    glBindVertexArray(0);
-
-    // ƒVƒF[ƒ_ƒvƒƒOƒ‰ƒ€‚Ìg—pI—¹
-    glUseProgram(0);
-
-    // ƒJƒ‰[ƒoƒbƒtƒ@‚ğ“ü‚ê‘Ö‚¦‚ÄƒCƒxƒ“ƒg‚ğæ‚èo‚·
-    window.swapBuffers();
-  }
+  // ãƒ–ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚äº†ã™ã‚‹
+  return EXIT_FAILURE;
 }
