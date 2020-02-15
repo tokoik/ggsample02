@@ -1,5 +1,5 @@
 ﻿// ウィンドウ関連の処理
-#include "GgApplication.h"
+#include "Window.h"
 
 //
 // シェーダオブジェクトのコンパイル結果を表示する
@@ -160,7 +160,7 @@ static GLuint createObject(GLuint vertices, const GLfloat (*position)[2], GLuint
 //
 // アプリケーションの実行
 //
-void GgApplication::run()
+void app()
 {
   // ウィンドウを作成する
   Window window("ggsample02");
