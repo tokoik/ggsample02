@@ -6,8 +6,8 @@
 
 * 宿題のひな形を変更して課題の図形の正面図 (xy 平面への直交投影図) を描いてください。
 * 宿題のひな形は [GitHub](https://github.com/tokoik/ggsample02) にあります
- (宿題のひな形で使っている[補助プログラムの解説](http://www.wakayama-u.ac.jp/~tokoi/lecture/gg/html/namespacegg.html))。
-* 詳しくは[講義のスライド](http://www.wakayama-u.ac.jp/~tokoi/lecture/gg/ggnote02.pdf)を参照してください。
+ (宿題のひな形で使っている[補助プログラムの解説](https://tokoik.github.io/gg/html/annotated.html))。
+* 詳しくは[講義のスライド](https://tokoik.github.io/gg/ggnote02.pdf)を参照してください。
 
 ## 補足
 
