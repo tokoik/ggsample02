@@ -169,7 +169,7 @@ void app()
   glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
   // バーテックスシェーダのソースプログラム
-  static constexpr GLchar vsrc[] =
+  static const GLchar vsrc[] =
     "#version 410 core\n"
     "in vec4 pv;\n"
     "void main(void)\n"
@@ -178,7 +178,7 @@ void app()
     "}\n";
 
   // フラグメントシェーダのソースプログラム
-  static constexpr GLchar fsrc[] =
+  static const GLchar fsrc[] =
     "#version 410 core\n"
     "out vec4 fc;\n"
     "void main(void)\n"
@@ -190,21 +190,21 @@ void app()
   const GLuint program(createProgram(vsrc, "pv", fsrc, "fc"));
 
   // 頂点属性
-  static constexpr GLfloat position[][2] =
+  static const GLfloat position[][2] =
   {
     { -0.5f, -0.5f },
     {  0.5f, -0.5f },
     {  0.5f,  0.5f },
     { -0.5f,  0.5f }
   };
-  static constexpr int vertices(sizeof position / sizeof position[0]);
+  constexpr int vertices(sizeof position / sizeof position[0]);
 
   // 頂点インデックス
-  static constexpr GLuint index[] =
+  static const GLuint index[] =
   {
     0, 2, 1, 3
   };
-  static constexpr GLuint lines(sizeof index / sizeof index[0]);
+  constexpr GLuint lines(sizeof index / sizeof index[0]);
 
   // 頂点配列オブジェクトの作成
   const GLuint vao(createObject(vertices, position, lines, index));
