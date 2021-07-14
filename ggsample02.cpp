@@ -1,5 +1,7 @@
-﻿// ウィンドウ関連の処理
-#include "Window.h"
+﻿//
+// ゲームグラフィックス特論宿題アプリケーション
+//
+#include "GgApp.h"
 
 //
 // シェーダオブジェクトのコンパイル結果を表示する
@@ -8,7 +10,7 @@
 //   str: コンパイルエラーが発生した場所を示す文字列
 //   戻り値: コンパイルに成功していたら GL_TRUE
 //
-static GLboolean printShaderInfoLog(GLuint shader, const char *str)
+static GLboolean printShaderInfoLog(GLuint shader, const char* str)
 {
   // コンパイル結果を取得する
   GLint status;
@@ -71,8 +73,8 @@ static GLboolean printProgramInfoLog(GLuint program)
 //   frag: フラグメントシェーダのコンパイル時のメッセージに追加する文字列
 //   戻り値: プログラムオブジェクト名
 //
-static GLuint createProgram(const char *vsrc, const char *pv, const char *fsrc, const char *fc,
-  const char *vert = "vertex shader", const char *frag = "fragment shader")
+static GLuint createProgram(const char* vsrc, const char* pv, const char* fsrc, const char* fc,
+  const char* vert = "vertex shader", const char* frag = "fragment shader")
 {
   // 空のプログラムオブジェクトを作成する
   const GLuint program(glCreateProgram());
@@ -126,7 +128,7 @@ static GLuint createProgram(const char *vsrc, const char *pv, const char *fsrc, 
 //   index: 線分の頂点インデックス
 //   戻り値: 作成された頂点配列オブジェクト名
 //
-static GLuint createObject(GLuint vertices, const GLfloat (*position)[2], GLuint lines, const GLuint *index)
+static GLuint createObject(GLuint vertices, const GLfloat(*position)[2], GLuint lines, const GLuint* index)
 {
   // 頂点配列オブジェクト
   GLuint vao;
@@ -137,13 +139,13 @@ static GLuint createObject(GLuint vertices, const GLfloat (*position)[2], GLuint
   GLuint vbo;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof (GLfloat[2]) * vertices, position, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat[2]) * vertices, position, GL_STATIC_DRAW);
 
   // インデックスバッファオブジェクト
   GLuint ibo;
   glGenBuffers(1, &ibo);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof (GLuint) * lines, index, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * lines, index, GL_STATIC_DRAW);
 
   // 結合されている頂点バッファオブジェクトを in 変数から参照できるようにする
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
@@ -158,56 +160,64 @@ static GLuint createObject(GLuint vertices, const GLfloat (*position)[2], GLuint
 }
 
 //
-// アプリケーションの実行
+// アプリケーション本体
 //
-void app()
+int GgApp::main(int argc, const char* const* argv)
 {
   // ウィンドウを作成する
-  Window window("ggsample02");
+  Window window{ "ggsample02" };
 
   // 背景色を指定する
   glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
   // バーテックスシェーダのソースプログラム
-  static const GLchar vsrc[] =
+  static const GLchar vsrc[]
+  {
     "#version 410 core\n"
     "in vec4 pv;\n"
     "void main(void)\n"
     "{\n"
     "  gl_Position = pv;\n"
-    "}\n";
+    "}\n"
+  };
 
   // フラグメントシェーダのソースプログラム
-  static const GLchar fsrc[] =
+  static const GLchar fsrc[]
+  {
     "#version 410 core\n"
     "out vec4 fc;\n"
     "void main(void)\n"
     "{\n"
     "  fc = vec4(1.0, 0.0, 0.0, 1.0);\n"
-    "}\n";
+    "}\n"
+  };
 
   // プログラムオブジェクトの作成
-  const GLuint program(createProgram(vsrc, "pv", fsrc, "fc"));
+  const auto program{ createProgram(vsrc, "pv", fsrc, "fc") };
 
   // 頂点属性
-  static const GLfloat position[][2] =
+  static const GLfloat position[][2]
   {
     { -0.5f, -0.5f },
     {  0.5f, -0.5f },
     {  0.5f,  0.5f },
     { -0.5f,  0.5f }
   };
-  constexpr int vertices(sizeof position / sizeof position[0]);
+
+  // 頂点数
+  constexpr auto vertices{ static_cast<GLuint>(std::size(position)) };
 
   // 頂点インデックス
-  static const GLuint index[] =
+  static const GLuint index[]
   {
     0, 2, 1, 3
   };
-  constexpr GLuint lines(sizeof index / sizeof index[0]);
+
+  // 稜線数
+  constexpr auto lines{ static_cast<GLuint>(std::size(index)) };
 
   // 頂点配列オブジェクトの作成
-  const GLuint vao(createObject(vertices, position, lines, index));
+  const auto vao{ createObject(vertices, position, lines, index) };
 
   // ウィンドウが開いている間繰り返す
   while (window)
@@ -233,4 +243,6 @@ void app()
     // カラーバッファを入れ替えてイベントを取り出す
     window.swapBuffers();
   }
+
+  return 0;
 }
