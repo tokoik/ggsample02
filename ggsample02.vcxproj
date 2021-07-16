@@ -152,6 +152,7 @@
     <ClInclude Include="gg.h" />
     <ClInclude Include="GgApp.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ggsample02.rc" />

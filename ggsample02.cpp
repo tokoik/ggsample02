@@ -3,6 +3,11 @@
 //
 #include "GgApp.h"
 
+// プロジェクト名
+#ifndef PROJECT_NAME
+#  define PROJECT_NAME "ggsample02"
+#endif
+
 //
 // シェーダオブジェクトのコンパイル結果を表示する
 //
@@ -164,8 +169,8 @@ static GLuint createObject(GLuint vertices, const GLfloat(*position)[2], GLuint 
 //
 int GgApp::main(int argc, const char* const* argv)
 {
-  // ウィンドウを作成する
-  Window window{ "ggsample02" };
+  // ウィンドウを作成する (この行は変更しないでください)
+  Window window{ argc > 1 ? argv[1] : PROJECT_NAME };
 
   // 背景色を指定する
   glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
