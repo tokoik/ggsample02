@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="gg.cpp" />
+    <ClCompile Include="GgApp.cpp" />
     <ClCompile Include="ggsample02.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -156,7 +157,6 @@
     <ClInclude Include="gg.h" />
     <ClInclude Include="GgApp.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ggsample02.rc" />
