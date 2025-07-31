@@ -2770,7 +2770,7 @@ gg::GgMatrix& gg::GgMatrix::loadScale(GLfloat x, GLfloat y, GLfloat z, GLfloat w
     x,    0.0f, 0.0f, 0.0f,
     0.0f, y,    0.0f, 0.0f,
     0.0f, 0.0f, z,    0.0f,
-    0.0f, 0.0f, 0.0f, x
+    0.0f, 0.0f, 0.0f, w
   };
 
   return *this;
@@ -2781,8 +2781,8 @@ gg::GgMatrix& gg::GgMatrix::loadScale(GLfloat x, GLfloat y, GLfloat z, GLfloat w
 //
 gg::GgMatrix& gg::GgMatrix::loadRotateX(GLfloat a)
 {
-  const auto c{ cos(a) };
-  const auto s{ sin(a) };
+  const auto c{ cosf(a) };
+  const auto s{ sinf(a) };
 
   *this =
   {
@@ -2800,8 +2800,8 @@ gg::GgMatrix& gg::GgMatrix::loadRotateX(GLfloat a)
 //
 gg::GgMatrix& gg::GgMatrix::loadRotateY(GLfloat a)
 {
-  const auto c{ cos(a) };
-  const auto s{ sin(a) };
+  const auto c{ cosf(a) };
+  const auto s{ sinf(a) };
 
   *this =
   {
@@ -2819,8 +2819,8 @@ gg::GgMatrix& gg::GgMatrix::loadRotateY(GLfloat a)
 //
 gg::GgMatrix& gg::GgMatrix::loadRotateZ(GLfloat a)
 {
-  const auto c{ cos(a) };
-  const auto s{ sin(a) };
+  const auto c{ cosf(a) };
+  const auto s{ sinf(a) };
 
   *this =
   {
@@ -2845,8 +2845,8 @@ gg::GgMatrix& gg::GgMatrix::loadRotate(GLfloat x, GLfloat y, GLfloat z, GLfloat 
     const auto l{ x / d }, m{ y / d }, n{ z / d };
     const auto l2{ l * l }, m2{ m * m }, n2{ n * n };
     const auto lm{ l * m }, mn{ m * n }, nl{ n * l };
-    const auto c{ cos(a) }, c1{ 1.0f - c };
-    const auto s{ sin(a) };
+    const auto c{ cosf(a) }, c1{ 1.0f - c };
+    const auto s{ sinf(a) };
 
     *this =
     {
@@ -3113,7 +3113,7 @@ gg::GgMatrix& gg::GgMatrix::loadOrthogonal(
     -(zFar + zNear) / dz,
     1.0f
   };
-  
+
   return *this;
 }
 
@@ -3170,7 +3170,7 @@ gg::GgMatrix& gg::GgMatrix::loadPerspective(
 
   if (dz == 0.0f) return *this;
 
-  const auto f{ 1.0f / tan(fovy * 0.5f) };
+  const auto f{ 1.0f / tanf(fovy * 0.5f) };
 
   *this =
   {
@@ -3292,17 +3292,17 @@ void gg::GgQuaternion::slerp(GLfloat* p, const GLfloat* q, const GLfloat* r, GLf
 gg::GgQuaternion& gg::GgQuaternion::loadRotate(GLfloat x, GLfloat y, GLfloat z, GLfloat a)
 {
   const auto l{ x * x + y * y + z * z };
-  const auto w{ cos(a *= 0.5f ) };
+  const auto w{ cosf(a *= 0.5f ) };
 
   if (fabs(l) > std::numeric_limits<float>::epsilon())
   {
-    const auto s{ sin(a) / sqrt(l) };
+    const auto s{ sinf(a) / sqrtf(l) };
 
-    *this = { x * s, y * s, z * s, w };
+    *this = GgQuaternion{ x * s, y * s, z * s, w };
   }
   else
   {
-    *this = { 0.0f, 0.0f, 0.0f, w };
+    *this = GgQuaternion{ 0.0f, 0.0f, 0.0f, w };
   }
 
   return *this;
@@ -3315,7 +3315,7 @@ gg::GgQuaternion& gg::GgQuaternion::loadRotateX(GLfloat a)
 {
   const auto t{ a * 0.5f };
 
-  *this = { sin(t), 0.0f, 0.0f, cos(t) };
+  *this = GgQuaternion{ sinf(t), 0.0f, 0.0f, cosf(t) };
 
   return *this;
 }
@@ -3327,7 +3327,7 @@ gg::GgQuaternion& gg::GgQuaternion::loadRotateY(GLfloat a)
 {
   const auto t{ a * 0.5f };
 
-  *this = { 0.0f, sin(t), 0.0f, cos(t) };
+  *this = GgQuaternion{ 0.0f, sinf(t), 0.0f, cosf(t) };
 
   return *this;
 }
@@ -3339,7 +3339,7 @@ gg::GgQuaternion& gg::GgQuaternion::loadRotateZ(GLfloat a)
 {
   const auto t{ a * 0.5f };
 
-  *this = { 0.0f, 0.0f, sin(t), cos(t) };
+  *this = GgQuaternion{ 0.0f, 0.0f, sinf(t), cosf(t) };
 
   return *this;
 }
@@ -5249,9 +5249,9 @@ std::shared_ptr<gg::GgPoints> gg::ggPointsSphere(GLsizei count, GLfloat radius,
     const auto r{ radius * static_cast<GLfloat>(rand()) / static_cast<GLfloat>(RAND_MAX) };
     const auto t{ 6.28318530718f * static_cast<GLfloat>(rand()) / (static_cast<GLfloat>(RAND_MAX) + 1.0f) };
     const auto cp{ 2.0f * static_cast<GLfloat>(rand()) / static_cast<GLfloat>(RAND_MAX) - 1.0f };
-    const auto sp{ sqrt(1.0f - cp * cp) };
-    const auto ct{ cos(t) };
-    const auto st{ sin(t) };
+    const auto sp{ sqrtf(1.0f - cp * cp) };
+    const auto ct{ cosf(t) };
+    const auto st{ sinf(t) };
     const GgVector p{ r * sp * ct + cx, r * sp * st + cy, r * cp + cz, 1.0f };
 
     pos.emplace_back(p);
