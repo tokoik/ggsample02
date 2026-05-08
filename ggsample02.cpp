@@ -180,7 +180,7 @@ int GgApp::main(int argc, const char* const* argv)
   {
     "#version 410 core\n"
     "in vec4 pv;\n"
-    "void main(void)\n"
+    "void main()\n"
     "{\n"
     "  gl_Position = pv;\n"
     "}\n"
@@ -191,7 +191,7 @@ int GgApp::main(int argc, const char* const* argv)
   {
     "#version 410 core\n"
     "out vec4 fc;\n"
-    "void main(void)\n"
+    "void main()\n"
     "{\n"
     "  fc = vec4(1.0, 0.0, 0.0, 1.0);\n"
     "}\n"
