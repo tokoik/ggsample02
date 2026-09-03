@@ -44,3 +44,5 @@ cmake_install.cmake
 !*.json
 !*.ttf
 !*.otf
+
+*.bak
