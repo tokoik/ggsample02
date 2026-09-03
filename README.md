@@ -1,28 +1,61 @@
-﻿# ggsample02
+# ggsample02 - 2次元図形の描画と頂点属性
 
-## ゲームグラフィックス特論　第２回　宿題
+## 1. 概要
 
-シェーダを使って図形を描いてください。
+本プログラムは、[ゲームグラフィックス特論](https://tokoik.github.io/gg/)の講義資料 [ggnote02.pdf](https://tokoik.github.io/gg/ggnote02.pdf) に対応する宿題のひな型プログラムです。
 
-* 宿題のひな形を変更して課題の図形の正面図 (xy 平面への直交投影図) を描いてください。
-* 宿題のひな形は [GitHub](https://github.com/tokoik/ggsample02) にあります
- (宿題のひな形で使っている[補助プログラムの解説](https://tokoik.github.io/gg/html/annotated.html))。
-* 詳しくは[講義のスライド](https://tokoik.github.io/gg/ggnote02.pdf)を参照してください。
+- 講義ポータル: [ゲームグラフィックス特論 - 床井研究室](https://tokoik.github.io/gg/)
+- 講義資料: [ggnote02.pdf](https://tokoik.github.io/gg/ggnote02.pdf)
 
-## 補足
+## 2. 宿題の内容
 
-このプログラムを実行すると、次のような図形が表示されます。
+インターリーブな頂点属性（3次元座標）を持つ図形の正面図（xy平面への直交投影図）をシェーダを使って描画してください。
 
-![このプログラムによる生成画像](images/ggsample02b.png "このプログラムによる生成画像") 
+- 3次元座標に合わせて `glVertexAttribPointer()` の第2引数 `size` を調整してください。
+- `ggsample02.cpp` を変更して課題を達成してください。
 
-このプログラムを、次の図形の正面図を表示するように修正してください。
+## 3. 対応環境
 
-![表示する図形データ](images/ggsample02a.png "表示する図形データ") 
+- **Windows**: Visual Studio 2019 / 2022 / 2026 (CMake 経由で GLFW 3.4 を自動ダウンロード)
+- **macOS**: Xcode (GLFW 3.4 を自動ダウンロード、OpenGL Framework を使用)
+- **Ubuntu Linux**: GCC / Make (システム標準の libglfw3-dev, libgl1-mesa-dev を使用)
 
-この画像が次のようになれば、多分、正解です。
+## 4. ビルド手順
 
-![期待される結果](images/ggsample02c.png "期待される結果") 
+### Windows (Visual Studio)
 
-* 頂点データの要素数が3（三次元）になっていることに注意してください。
-* glVertexAttribPointer() の第2引数 size をそれに合わせる必要があります。
-* ggsample02.cpp をアップローダで提出してください。
+```pwsh
+cmake -B build -S .
+cmake --build build --config Release
+```
+
+### macOS (Xcode)
+
+```bash
+cmake -B build -G Xcode
+cmake --build build --config Release
+```
+
+### Ubuntu Linux (Makefile)
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libglfw3-dev libgl1-mesa-dev
+cmake -B build -S .
+cmake --build build
+```
+
+## 5. 起動方法
+
+ビルド完了後、生成された実行ファイルを実行します。
+
+- **Windows**: `build/Release/ggsample02.exe`
+- **macOS**: `build/Release/ggsample02.app`
+- **Linux**: `build/ggsample02`
+
+## 6. 操作方法
+
+- **マウス左ドラッグ**: シーンの視点回転
+- **マウス右ドラッグ**: 視点の平行移動
+- **マウスホイール**: ズームイン / ズームアウト
+- **[q] / [Q] / [ESC]**: プログラムの終了
